@@ -1,8 +1,6 @@
 require("dotenv").config();
-var keys = require("keys.js");
+var keys = require("./keys.js");
 
-
-var spotify = new Spotify(keys.spotify);
 
 function mytweets() {
   var Twitter = require("twitter");
@@ -10,14 +8,11 @@ function mytweets() {
   var params = {screen_name: 'Khalil21442699'}
   var collect = ""
 
-  client.get('statuses/user_timeline', params, function(error, tweets, response) {
-      if (!error) {
-          for (var tweet in tweets) {
-              collect += "Tweet Text: " + tweets[tweet].text + "| Created at: " + tweets[tweet].created_at + "\n";
-          }
-
-          logOut("Tweets", collect);
-      }
+  client.get('statuses/home_timeline', params, function(error, tweets, response) {
+    for (var tweet in tweets) {
+        collect += "Tweet Text: " + tweets[tweet].text + "| Created at: " + tweets[tweet].created_at + "\n";
+    }
+    console.log(collect);
     })
 }
 
@@ -34,7 +29,7 @@ function spotifythissong(song) {
         return console.log('Error occurred: ' + err);
       }
 
-      logOut("Song", 
+      console.log("Song", 
       "Song Name: " + data.tracks.items[0].name + "\n" +
       "Artist Name: " + data.tracks.items[0].name + "\n" +
       "Preview: " + data.tracks.items[0].preview_url + "\n" +
@@ -85,3 +80,19 @@ function doWhat() {
       run(command, param);
   });
 }
+
+function main() {
+  var input = process.argv[2]
+
+  if (input === "mytweets"){
+    mytweets();
+  } else if (input === "spotify-this-song") {
+    spotifythissong();
+  } else if (input === "movie-this") {
+    thisMovie();
+  } else if (input === "do-what-it-says") {
+    dowhat();
+  }
+}
+
+main();
